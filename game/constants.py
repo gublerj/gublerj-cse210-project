@@ -1,0 +1,5 @@
+MAX_X = 600
+MAX_Y = 400
+SCREEN_TITLE = "Endless Zombies?"
+FRAME_LENGTH = 0.05
+
