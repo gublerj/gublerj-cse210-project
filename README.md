@@ -56,6 +56,30 @@ Play button
 
 What is your timeline? The answer to this question is mostly already decided. Just take a minute to review the rest of the course schedule together.
 
+Classes:
+Actors:
+Player
+zombie
+blocks
+weopons
+score
+health?(may stick in player and or actor if more convient)
+
+Actions:
+player_move
+zombie_move
+handle_collisions
+ - zombie_player_collision
+ - player_wall/object collision
+ - zombie-object collision
+ - zombie-bullet collision
+ - weapon_collision
+ - door_collision
+player_shoot
+
+How to add background images: https://arcade.academy/examples/sprite_collect_coins_background.html
+
+
 # SCHEDULE
 
 # Plan (week 09 - 6th)
@@ -63,6 +87,21 @@ This README
 
 # Aplpha (week 10 - March 13th)
 Player in the first room
+
+group 1 - Logan, Joshua
+group 2 - Kaushal, Brandon
+Actors:
+Player(1) - group 1
+- sprit
+Zombie(1) - group 2
+- sprit made
+obsticals(2) - group 2
+
+actions:
+player_move(1) - group 1
+
+graphics:
+Create a boring room(1) - group 2
 
 # Beta (week 11 - March 20th)
 Add zombies and weapon
