@@ -7,6 +7,6 @@ import arcade
 # Setup window
 director = Director(constants.MAX_X, constants.MAX_Y, constants.SCREEN_TITLE)
 
-test = zombie()
+#test = zombie()
 # Start game
 director.start_game()
