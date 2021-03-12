@@ -24,7 +24,7 @@ class Director(arcade.Window):
         self.CHARACTER_SCALING = constants.CHARACTER_SCALING
         self.player_movement_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
         self.output_service = Output_service()
-        self.create_zombie = Create_zombie()
+        self.create_zombie = None
         self.player = None
         self.all_sprites = {}
 
@@ -36,6 +36,7 @@ class Director(arcade.Window):
         # go into a list.
         self.player_list = None
         self.zombie_list = None
+        self.zombie_image = constants.zombie_image
 
 
         # Separate variable that holds the player sprite
@@ -48,15 +49,9 @@ class Director(arcade.Window):
         # Create the Sprite lists
         self.player_list = arcade.SpriteList()
         self.zombie_list = arcade.SpriteList()
-        self.player = Player(":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png")
-
-        # Set up the player, specifically placing it at these coordinates.
-        #image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
-
-        self.player_sprite = arcade.Sprite(self.player.get_sprite(), self.CHARACTER_SCALING)
-        position = self.player.get_position()
-        self.player_sprite.center_x = position.get_x()
-        self.player_sprite.center_y = position.get_y()
+        self.player_sprite = Player(":resources:images/animated_characters/female_person/femalePerson_idle.png", self.CHARACTER_SCALING)
+        self.player_sprite.center_x = 50
+        self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
 
     def on_draw(self):
@@ -68,13 +63,13 @@ class Director(arcade.Window):
         """Called whenever a key is pressed. """
 
         if key == arcade.key.UP or key == arcade.key.W:
-            self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_y = self.player_movement_speed
         elif key == arcade.key.DOWN or key == arcade.key.S:
-            self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_y = -self.player_movement_speed
         elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_x = -self.player_movement_speed
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_x = self.player_movement_speed
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
@@ -90,18 +85,24 @@ class Director(arcade.Window):
             
     def on_update(self, delta_time):
         """ Movement and game logic """
+        self.player_list.update()
 
         
 
     def create_zombies(self):
         """ creates a zombie when needed"""
         for x in range(1):
-            zombie = Create_zombie()
-            zombie_sprite = arcade.Sprite(zombie.get_sprite(), self.CHARACTER_SCALING)
-            zombie_position = zombie.get_position()
-            zombie_sprite.center_x = zombie_position.get_x()
-            zombie_sprite.center_y = zombie_position.get_y()
+            zombie_sprite = Create_zombie(self.zombie_image, self.CHARACTER_SCALING)
+            zombie_sprite.center_x = self.SCREEN_WIDTH / 2
+            zombie_sprite.center_y = self.SCREEN_HEIGHT - 50
             self.zombie_list.append(zombie_sprite)
+
+            #zombie = Create_zombie()
+            #zombie_sprite = arcade.Sprite(zombie.get_sprite(), self.CHARACTER_SCALING)
+            #zombie_position = zombie.get_position()
+            #zombie_sprite.center_x = zombie_position.get_x()
+            #zombie_sprite.center_y = zombie_position.get_y()
+            #self.zombie_list.append(zombie_sprite)
 
 
     def execute(self):
