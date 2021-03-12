@@ -100,6 +100,9 @@ obsticals(2) - group 2
 actions:
 player_move(1) - group 1
 
+director
+output service
+main - Logan
 graphics:
 Create a boring room(1) - group 2
 

@@ -1,7 +1,7 @@
 from game import constants
 from game.point import Point
 
-#Change the sprittual to what makes more sense
+#Change the spritetual to what makes more sense
 class Actor:
     """A visible, moveable thing that participates in the game. The responsibility of Actor is to keep track of its appearance, position 
     and velocity in 2d space.
@@ -11,7 +11,7 @@ class Actor:
 
     Attributes:
         _tag (string): The actor's tag.
-        _sprit (string): The spritual representation of the actor.
+        _sprite (string): The spriteual representation of the actor.
         _position (Point): The actor's position in 2d space.
         _velocity (Point): The actor's speed and direction.
     """
@@ -19,7 +19,7 @@ class Actor:
     def __init__(self):
         """The class constructor."""
         self._description = ""
-        self._sprit = ""
+        self._sprite = ""
         self._position = Point(0, 0)
         self._velocity = Point(0, 0)
 
@@ -39,13 +39,13 @@ class Actor:
         """
         return self._position
     
-    def get_sprit(self):
-        """Gets the actor's spritual representation.
+    def get_sprite(self):
+        """Gets the actor's spriteual representation.
         
         Returns:
-            string: The actor's spritual representation.
+            string: The actor's spriteual representation.
         """
-        return self._sprit
+        return self._sprite
 
     def get_velocity(self):
         """Gets the actor's speed and direction.
@@ -71,13 +71,13 @@ class Actor:
         """
         self._position = position
     
-    def set_sprit(self, sprit):
-        """Updates the actor's sprit to the given value.
+    def set_sprite(self, sprite):
+        """Updates the actor's sprite to the given value.
         
         Args:
-            sprit (string): The given value.
+            sprite (string): The given value.
         """
-        self._sprit = sprit
+        self._sprite = sprite
 
     def set_velocity(self, velocity):
         """Updates the actor's velocity to the given one.
@@ -99,7 +99,7 @@ class Actor:
                  or 
                  other_y in range(self_y - 5, self_y + 5))
              and 
-                (self_x in range(other_x, other_x + 10 * len(other.get_sprit())) or
-                 other_x in range(self_x, self_x + 10 * len(self.get_sprit()))
+                (self_x in range(other_x, other_x + 10 * len(other.get_sprite())) or
+                 other_x in range(self_x, self_x + 10 * len(self.get_sprite()))
                 )
         )
