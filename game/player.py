@@ -10,6 +10,7 @@ class Player(arcade.Sprite):
         #self._sprite = sprite
         #self.set_sprite(self._sprite)
         #self.set_position(constants.SCREEN_WIDTH / 2, 100)
+        
 
 
     def update(self):
