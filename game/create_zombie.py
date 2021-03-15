@@ -8,13 +8,14 @@ import math
 class Create_zombie(arcade.Sprite):
     """This class will allow us to create basic zombies with ease"""
 
-    #def __init__(self):
-        #super().__init__()
-        ##self.set_sprite(":resources:images/animated_characters/zombie/zombie_idle.png")
-        #self.set_position(Point(constants.SCREEN_WIDTH / 2, constants.SCREEN_HEIGHT))
-    def update(self, player_sprite):
+    def __init__(self, sprite, scalling):
+        super().__init__(sprite, scalling)
+        
+    def update(self):
         """ Move the player """
         self.move_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
+        #self.player_sprite = player_sprite
+        #self.follow_player()
     def follow_player(self, player_sprite):
         """
         This function will move the current sprite towards whatever
@@ -28,8 +29,6 @@ class Create_zombie(arcade.Sprite):
         self.center_x += self.change_x
         self.center_y += self.change_y
 
-        # Random 1 in 100 chance that we'll change from our old direction and
-        # then re-aim toward the player
         start_x = self.center_x
         start_y = self.center_y
 
