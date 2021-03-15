@@ -12,7 +12,7 @@ class Create_zombie(arcade.Sprite):
         #super().__init__()
         ##self.set_sprite(":resources:images/animated_characters/zombie/zombie_idle.png")
         #self.set_position(Point(constants.SCREEN_WIDTH / 2, constants.SCREEN_HEIGHT))
-    def update(self, player_sprite):
+    def update(self):
         """ Move the player """
         self.move_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
     def follow_player(self, player_sprite):
@@ -28,8 +28,6 @@ class Create_zombie(arcade.Sprite):
         self.center_x += self.change_x
         self.center_y += self.change_y
 
-        # Random 1 in 100 chance that we'll change from our old direction and
-        # then re-aim toward the player
         start_x = self.center_x
         start_y = self.center_y
 

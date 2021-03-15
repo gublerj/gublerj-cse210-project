@@ -5,9 +5,8 @@ import arcade
 
 class Player(arcade.Sprite):
     
-    def __init__(self):
-        pass
-        #super().__init__()
+    def __init__(self, sprite, scalling):
+        super().__init__(sprite, scalling)
         #self._sprite = sprite
         #self.set_sprite(self._sprite)
         #self.set_position(constants.SCREEN_WIDTH / 2, 100)
