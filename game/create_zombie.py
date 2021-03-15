@@ -10,8 +10,7 @@ class Create_zombie(arcade.Sprite):
 
     def __init__(self, sprite, scalling):
         super().__init__(sprite, scalling)
-        #self.set_sprite(":resources:images/animated_characters/zombie/zombie_idle.png")
-        #self.set_position(Point(constants.SCREEN_WIDTH / 2, constants.SCREEN_HEIGHT))
+        
     def update(self):
         """ Move the player """
         self.move_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
