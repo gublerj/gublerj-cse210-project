@@ -15,6 +15,8 @@ class Create_zombie(arcade.Sprite):
     def update(self):
         """ Move the player """
         self.move_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
+        #self.player_sprite = player_sprite
+        #self.follow_player()
     def follow_player(self, player_sprite):
         """
         This function will move the current sprite towards whatever

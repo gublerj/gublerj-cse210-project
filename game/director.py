@@ -6,6 +6,7 @@ from game import constants
 from game.player import Player
 from game.output_service import Output_service
 from game.create_zombie import Create_zombie
+from game.input_service import Input_service
 
 
 class Director(arcade.Window):
@@ -24,6 +25,7 @@ class Director(arcade.Window):
         self.CHARACTER_SCALING = constants.CHARACTER_SCALING
         self.player_movement_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
         self.output_service = Output_service()
+        self.input_service = Input_service()
         self.create_zombie = None
         self.player = None
         self.all_sprites = {}
@@ -74,16 +76,17 @@ class Director(arcade.Window):
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
-        #self.input_service.key_release(key, modifiers)
+        #self.input_service(self.all_sprites)
+        self.player_sprite = self.input_service.on_release(key, modifiers, self.all_sprites)
 
-        if key == arcade.key.UP or key == arcade.key.W:
-            self.player_sprite.change_y = 0
-        elif key == arcade.key.DOWN or key == arcade.key.S:
-            self.player_sprite.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = 0
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = 0
+        #if key == arcade.key.UP or key == arcade.key.W:
+            #self.player_sprite.change_y = 0
+        #elif key == arcade.key.DOWN or key == arcade.key.S:
+            #self.player_sprite.change_y = 0
+        #elif key == arcade.key.LEFT or key == arcade.key.A:
+            #self.player_sprite.change_x = 0
+        #elif key == arcade.key.RIGHT or key == arcade.key.D:
+            #self.player_sprite.change_x = 0
             
     def on_update(self, delta_time):
         """ Movement and game logic """
