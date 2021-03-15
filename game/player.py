@@ -5,7 +5,8 @@ import arcade
 
 class Player(arcade.Sprite):
     
-    #def __init__(self):
+    def __init__(self):
+        pass
         #super().__init__()
         #self._sprite = sprite
         #self.set_sprite(self._sprite)

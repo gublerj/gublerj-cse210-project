@@ -111,6 +111,15 @@ Add zombies and weapon
 Add start screen
 Add end screen
 
+Group 1 - Logan, Joshua
+Group 2 - Brandon, Kaushal
+shooting(1) - group 1
+zombie collision(1) - group 2
+bullett collision(1) - group 1
+add start (2) - Group 1
+add end (3) - Group 1
+add health(2) - group 2
+
 # Release candidate (week 12 - March 27th)
 New rooms
 Add scenery
