@@ -5,11 +5,13 @@ import arcade
 
 class Player(arcade.Sprite):
     
-    #def __init__(self):
+    def __init__(self):
+        pass
         #super().__init__()
         #self._sprite = sprite
         #self.set_sprite(self._sprite)
         #self.set_position(constants.SCREEN_WIDTH / 2, 100)
+        
 
 
     def update(self):

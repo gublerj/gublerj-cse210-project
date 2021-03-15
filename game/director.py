@@ -53,6 +53,7 @@ class Director(arcade.Window):
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
+        self.all_sprites['player'] = [self.player_list]
 
     def on_draw(self):
         """ Render the screen. """
@@ -73,6 +74,7 @@ class Director(arcade.Window):
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
+        #self.input_service.key_release(key, modifiers)
 
         if key == arcade.key.UP or key == arcade.key.W:
             self.player_sprite.change_y = 0
@@ -86,6 +88,10 @@ class Director(arcade.Window):
     def on_update(self, delta_time):
         """ Movement and game logic """
         self.player_list.update()
+        self.zombie_list.update()
+        for zombie in self.zombie_list:
+            zombie.follow_player(self.player_sprite)
+        #self.zombie_list.follow_player(self.all_sprites)
 
         
 
@@ -96,6 +102,7 @@ class Director(arcade.Window):
             zombie_sprite.center_x = self.SCREEN_WIDTH / 2
             zombie_sprite.center_y = self.SCREEN_HEIGHT - 50
             self.zombie_list.append(zombie_sprite)
+        self.all_sprites["zombie"] = [self.zombie_list]
 
             #zombie = Create_zombie()
             #zombie_sprite = arcade.Sprite(zombie.get_sprite(), self.CHARACTER_SCALING)
