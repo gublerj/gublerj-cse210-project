@@ -1,4 +1,4 @@
-from game.actor import Actor
+
 from game.point import Point
 
 from game import constants
@@ -10,7 +10,7 @@ class Create_zombie(arcade.Sprite):
 
     def __init__(self, sprite, scalling):
         super().__init__(sprite, scalling)
-        
+
     def update(self):
         """ Move the player """
         self.move_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED

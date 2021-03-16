@@ -70,6 +70,6 @@ class Input_service:
         bullet_list.append(bullet)
         player_sprites['bullet'] = [bullet_list]
 
-        return all_sprites
+        return player_sprites
 
         
