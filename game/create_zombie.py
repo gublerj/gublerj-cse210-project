@@ -10,10 +10,19 @@ class Create_zombie(arcade.Sprite):
 
     def __init__(self, sprite, scalling):
         super().__init__(sprite, scalling)
+        self.hit = False
+        self.count = 0
 
     def update(self):
         """ Move the player """
         self.move_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
+        if self.hit == True:
+            self.change_x = 0
+            self.change_y = 0
+            self.count = self.count + 1
+        if self.count == 10:
+            self.count = 0
+            self.hit = False
         #self.player_sprite = player_sprite
         #self.follow_player()
     def follow_player(self, player_sprite):
@@ -47,3 +56,6 @@ class Create_zombie(arcade.Sprite):
             # and change_y. Velocity is how fast the bullet travels.
         self.change_x = math.cos(angle) * self.move_speed
         self.change_y = math.sin(angle) * self.move_speed
+
+    def set_hit(self, hit):
+        self.hit = hit
