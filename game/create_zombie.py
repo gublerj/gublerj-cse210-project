@@ -60,4 +60,7 @@ class Create_zombie(arcade.Sprite):
     def set_health(self, health):
         self.health = self.health - health
         return self.health
+
+    def get_damage(self):
+        return 1
             
