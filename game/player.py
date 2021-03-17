@@ -5,12 +5,12 @@ import arcade
 
 class Player(arcade.Sprite):
     
-    def __init__(self, sprite, scalling):
-        super().__init__(sprite, scalling)
+    def __init__(self, sprite, scaling):
+        super().__init__(sprite, scaling)
+        self.player_health = 10
         #self._sprite = sprite
         #self.set_sprite(self._sprite)
         #self.set_position(constants.SCREEN_WIDTH / 2, 100)
-        
 
 
     def update(self):
@@ -32,3 +32,16 @@ class Player(arcade.Sprite):
         elif self.top > self.SCREEN_HEIGHT - 1:
             self.top = self.SCREEN_HEIGHT - 1
 
+    def player_damage(self, damage):
+        """
+        When zombie hits player, the player loses health
+        """
+
+        self.player_health -= damage
+
+    def get_health(self):
+        """
+        Returns how much health the player has
+        """
+        
+        return self.player_health

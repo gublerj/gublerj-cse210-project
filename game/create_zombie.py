@@ -8,14 +8,16 @@ import math
 class Create_zombie(arcade.Sprite):
     """This class will allow us to create basic zombies with ease"""
 
-    def __init__(self, sprite, scalling):
-        super().__init__(sprite, scalling)
+    def __init__(self, sprite, scaling):
+        super().__init__(sprite, scaling)
+        self.zombie_health = 10
 
     def update(self):
         """ Move the player """
         self.move_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
         #self.player_sprite = player_sprite
         #self.follow_player()
+        
     def follow_player(self, player_sprite):
         """
         This function will move the current sprite towards whatever
@@ -47,3 +49,10 @@ class Create_zombie(arcade.Sprite):
             # and change_y. Velocity is how fast the bullet travels.
         self.change_x = math.cos(angle) * self.move_speed
         self.change_y = math.sin(angle) * self.move_speed
+
+
+        def take_damage(self, damage):
+            """
+            When the player shoots the zombie, the zombie's health will decrease
+            """
+            self.zombie_health -= damage
