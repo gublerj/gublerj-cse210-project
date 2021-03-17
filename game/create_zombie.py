@@ -1,6 +1,3 @@
-
-from game.point import Point
-
 from game import constants
 import arcade
 import math
@@ -8,17 +5,27 @@ import math
 class Create_zombie(arcade.Sprite):
     """This class will allow us to create basic zombies with ease"""
 
-    def __init__(self, sprite, scaling):
-        super().__init__(sprite, scaling)
-        self.zombie_health = 10
+    def __init__(self, sprite, scalling, zombie_modifier):
+        super().__init__(sprite, scalling)
+        self.hit = False
+        self.count = 0
+        self.health = 100 * zombie_modifier[2]
+        self.move_speed = zombie_modifier[1] * 2
 
     def update(self):
         """ Move the player """
-        self.move_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
+        self.move_speed = self.move_speed
+        if self.hit == True:
+            self.change_x = 0
+            self.change_y = 0
+            self.count = self.count + 1
+        if self.count == 10:
+            self.count = 0
+            self.hit = False
+
         #self.player_sprite = player_sprite
         #self.follow_player()
-        
-    def follow_player(self, player_sprite):
+    def follow_player(self, player_sprites):
         """
         This function will move the current sprite towards whatever
         other sprite is specified as a parameter.
@@ -27,14 +34,14 @@ class Create_zombie(arcade.Sprite):
         the target sprite, and not jump around if the sprite is not off
         an exact multiple of SPRITE_SPEED.
         """
-        self.player_sprite = player_sprite
+        self.player_sprite = player_sprites['player'][0][0]
         self.center_x += self.change_x
         self.center_y += self.change_y
 
         start_x = self.center_x
         start_y = self.center_y
 
-            # Get the destination location for the bullet
+            # Gset the destination location for the bullet
         dest_x = self.player_sprite.center_x
         dest_y = self.player_sprite.center_y
 
@@ -51,8 +58,18 @@ class Create_zombie(arcade.Sprite):
         self.change_y = math.sin(angle) * self.move_speed
 
 
-        def take_damage(self, damage):
-            """
-            When the player shoots the zombie, the zombie's health will decrease
-            """
-            self.zombie_health -= damage
+    # def take_damage(self, damage):
+    #     """
+    #     When the player shoots the zombie, the zombie's health will decrease
+    #     """
+    #     self.zombie_health -= damage
+
+    def set_hit(self, hit):
+        self.hit = hit
+
+    def set_health(self, health):
+        self.health = self.health - health
+        return self.health
+            
+    def get_damage(self):
+        return 1
