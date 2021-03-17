@@ -13,7 +13,7 @@ from game.collisions import Collisions
 from game.set_up import Set_up
 
 
-class Director(arcade.View):
+class Director(arcade.Window):
     """
     Main application class.
     """
@@ -44,7 +44,7 @@ class Director(arcade.View):
 
         # Call the parent class and set up the window
         #super().__init__(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.SCREEN_TITLE)
-        super().__init__()
+        super().__init__(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.SCREEN_TITLE)
 
         # These are 'lists' that keep track of our sprites. Each sprite should
         # go into a list.
