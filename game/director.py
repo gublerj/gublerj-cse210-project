@@ -13,7 +13,7 @@ from game.collisions import Collisions
 from game.set_up import Set_up
 
 
-class Director(arcade.View):
+class Director(arcade.Window):
     """
     Main application class.
     """
@@ -99,6 +99,7 @@ class Director(arcade.View):
         self.zombie_modifiers = self.collision.bullet_zombie_collision(self.all_sprites, self.zombie_modifiers)
         if len(self.zombie_list) == 0:
             self.create_zombies()
+        self.collision.zombie_player_collision(self.all_sprites)
 
     def create_zombies(self):
         """ creates a zombie when needed"""

@@ -14,3 +14,5 @@ class Output_service:
             zombie.draw()
         for bullet in bullets:
             bullet.draw()
+        
+        arcade.draw_text(f"Health: {player.get_health()}", 10, 20, arcade.color.WHITE, 14)
