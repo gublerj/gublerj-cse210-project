@@ -3,15 +3,17 @@ Platformer Game
 """
 import arcade
 import math
+import random
 from game import constants
 from game.player import Player
 from game.output_service import Output_service
 from game.create_zombie import Create_zombie
 from game.input_service import Input_service
 from game.collisions import Collisions
+from game.set_up import Set_up
 
 
-class Director(arcade.Window):
+class Director(arcade.View):
     """
     Main application class.
     """
@@ -31,13 +33,18 @@ class Director(arcade.Window):
         self.output_service = Output_service()
         self.input_service = Input_service()
         self.collision = Collisions()
+        self.set_up = Set_up()
         self.create_zombie = None
         self.player = None
+        #zombie modifiers contains a list used to change zombie stats so that we can make them better the farther we go
+        #1 = number of zombies, .125 is a speed modifier
+        self.zombie_modifiers = []
         self.all_sprites = {}
 
 
         # Call the parent class and set up the window
-        super().__init__(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.SCREEN_TITLE)
+        #super().__init__(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.SCREEN_TITLE)
+        super().__init__()
 
         # These are 'lists' that keep track of our sprites. Each sprite should
         # go into a list.
@@ -54,6 +61,7 @@ class Director(arcade.Window):
 
     def setup(self):
         """ Set up the game here. Call this function to restart the game. """
+        """
         # Create the Sprite lists
         self.player_list = arcade.SpriteList()
         self.zombie_list = arcade.SpriteList()
@@ -65,7 +73,14 @@ class Director(arcade.Window):
         # all sprites contains all of the lists of sprits created by arcade (contains the player list, bullet list and zombie list)
         self.all_sprites['player'] = [self.player_list]
         self.all_sprites['bullet'] = [self.bullet_list]
-
+        self.zombie_count = 1
+        self.zombie_modifiers = [1, .125, 1, 0]
+        self.modifiers['zombie'] = self.zombie_modifiers
+        """
+        self.all_sprites, self.zombie_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_modifiers)
+        self.player_list = self.all_sprites['player'][0]
+        self.zombie_list = self.all_sprites['zombie'][0]
+        self.bullet_list = self.all_sprites['bullet'][0]
     def on_draw(self):
         """ Render the screen. """
         arcade.start_render()
@@ -92,15 +107,17 @@ class Director(arcade.Window):
         self.zombie_list.update()
         self.bullet_list.update()
         for zombie in self.zombie_list:
-            zombie.follow_player(self.player_sprite)
-        self.collision.bullet_zombie_collision(self.all_sprites)
+            zombie.follow_player(self.all_sprites)
+        self.zombie_modifiers = self.collision.bullet_zombie_collision(self.all_sprites, self.zombie_modifiers)
+        if len(self.zombie_list) == 0:
+            self.create_zombies()
 
     def create_zombies(self):
         """ creates a zombie when needed"""
-        for x in range(1):
-            zombie_sprite = Create_zombie(self.zombie_image, self.CHARACTER_SCALING)
-            zombie_sprite.center_x = self.SCREEN_WIDTH / 2
-            zombie_sprite.center_y = self.SCREEN_HEIGHT - 50
+        for x in range(self.zombie_modifiers[0]):
+            zombie_sprite = Create_zombie(self.zombie_image, self.CHARACTER_SCALING, self.zombie_modifiers)
+            zombie_sprite.center_x = random.randint(0, self.SCREEN_WIDTH)
+            zombie_sprite.center_y = random.randint(0, self.SCREEN_HEIGHT)
             self.zombie_list.append(zombie_sprite)
         self.all_sprites["zombie"] = [self.zombie_list]
 
