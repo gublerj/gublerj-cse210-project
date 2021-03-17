@@ -43,8 +43,9 @@ class Director(arcade.Window):
 
 
         # Call the parent class and set up the window
-        super().__init__(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.SCREEN_TITLE)
-        # super().__init__()
+        #super().__init__(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.SCREEN_TITLE)
+        #super().__init__(self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.SCREEN_TITLE)
+        super().__init__()
 
         # These are 'lists' that keep track of our sprites. Each sprite should
         # go into a list.
@@ -56,27 +57,15 @@ class Director(arcade.Window):
 
         # Separate variable that holds the player sprite
         self.player_sprite = None
+        self.all_sprites, self.zombie_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_modifiers)
+        self.player_list = self.all_sprites['player'][0]
+        self.zombie_list = self.all_sprites['zombie'][0]
+        self.bullet_list = self.all_sprites['bullet'][0]
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
         """ Set up the game here. Call this function to restart the game. """
-        """
-        # Create the Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.zombie_list = arcade.SpriteList()
-        self.player_sprite = Player(":resources:images/animated_characters/female_person/femalePerson_idle.png", self.CHARACTER_SCALING)
-        self.player_sprite.center_x = 50
-        self.player_sprite.center_y = 50
-        self.player_list.append(self.player_sprite)
-        self.bullet_list = arcade.SpriteList()
-        # all sprites contains all of the lists of sprits created by arcade (contains the player list, bullet list and zombie list)
-        self.all_sprites['player'] = [self.player_list]
-        self.all_sprites['bullet'] = [self.bullet_list]
-        self.zombie_count = 1
-        self.zombie_modifiers = [1, .125, 1, 0]
-        self.modifiers['zombie'] = self.zombie_modifiers
-        """
         self.all_sprites, self.zombie_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_modifiers)
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
@@ -85,8 +74,7 @@ class Director(arcade.Window):
         """ Render the screen. """
         arcade.start_render()
         self.output_service.execute(self.all_sprites)
-        #self.bullet_list.draw()
-    
+
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
         self.player_sprites = self.input_service.on_press(key, modifiers, self.all_sprites, self.player_movement_speed)
