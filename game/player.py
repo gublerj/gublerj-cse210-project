@@ -1,6 +1,5 @@
 
 from game import constants
-from game.point import Point
 import arcade
 
 class Player(arcade.Sprite):
