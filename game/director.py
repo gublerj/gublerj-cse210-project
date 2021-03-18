@@ -116,6 +116,8 @@ class Director(arcade.View):
         if len(self.zombie_list) == 0:
             self.create_zombies()
         self.collision.zombie_player_collision(self.all_sprites)
+        self.PhysicsEngineSimple = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['zombie'][0])
+        self.PhysicsEngineSimple.update()
 
     def create_zombies(self):
         """ creates a zombie when needed"""

@@ -68,3 +68,5 @@ class Collisions:
 
             if len(hit_list) > 0:
                 player_sprite.player_damage(zombie.get_damage())
+                zombie.set_hit_player()
+                
