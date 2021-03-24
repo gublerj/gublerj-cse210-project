@@ -65,6 +65,7 @@ class Director(arcade.View):
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
         self.wall_list = self.all_sprites['wall'][0]
+        self.obstical_list = self.all_sprites['obsticals'][0]
 
 
         # Separate variable that holds the player sprite
@@ -114,6 +115,9 @@ class Director(arcade.View):
         self.collision.zombie_player_collision(self.all_sprites)
         self.PhysicsEngineSimple = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['zombie'][0])
         self.PhysicsEngineSimple_2 = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['wall'][0])
+        for zombie in self.all_sprites['zombie'][0]:
+            physics = arcade.PhysicsEngineSimple(zombie, self.all_sprites['obsticals'][0])
+            physics.update()
         self.PhysicsEngineSimple.update()
         self.PhysicsEngineSimple_2.update()
         if self.player_list[0].get_health() <= 0:

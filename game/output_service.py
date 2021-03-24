@@ -10,6 +10,7 @@ class Output_service:
         zombies = actors['zombie'][0]
         bullets = actors['bullet'][0]
         walls = actors['wall'][0]
+        obsticals = actors['obsticals'][0]
         player.draw()
         for zombie in zombies:
             zombie.draw()
@@ -17,5 +18,7 @@ class Output_service:
             bullet.draw()
         for wall in walls:
             wall.draw() 
+        for obstical in obsticals:
+            obstical.draw()
         
         arcade.draw_text(f"Health: {player.get_health()}", 10, 20, arcade.color.WHITE, 14)
