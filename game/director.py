@@ -11,6 +11,7 @@ from game.create_zombie import Create_zombie
 from game.input_service import Input_service
 from game.collisions import Collisions
 from game.set_up import Set_up
+from game.game_over import GameOverView
 
 
 class Director(arcade.View):
@@ -36,10 +37,17 @@ class Director(arcade.View):
         self.set_up = Set_up()
         self.create_zombie = None
         self.player = None
+        self.game_over = GameOverView()
+        self.level = 1
+        # 60 = 1 sec
+        #self.total_time = 60
         #zombie modifiers contains a list used to change zombie stats so that we can make them better the farther we go
         #1 = number of zombies, .125 is a speed modifier
         self.zombie_modifiers = []
+        self.zombie_base_modifiers = [1,2,3]
+        self.create_new_zombie = 0
         self.all_sprites = {}
+        self.new_round = True
 
 
         # Call the parent class and set up the window
@@ -52,7 +60,7 @@ class Director(arcade.View):
         self.zombie_list = None
         self.bullet_list = None
         self.zombie_image = constants.zombie_image
-        self.all_sprites, self.zombie_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_modifiers)
+        self.all_sprites, self.zombie_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_base_modifiers, self.level)
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
@@ -65,26 +73,12 @@ class Director(arcade.View):
 
     def setup(self):
         """ Set up the game here. Call this function to restart the game. """
-        """
-        # Create the Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.zombie_list = arcade.SpriteList()
-        self.player_sprite = Player(":resources:images/animated_characters/female_person/femalePerson_idle.png", self.CHARACTER_SCALING)
-        self.player_sprite.center_x = 50
-        self.player_sprite.center_y = 50
-        self.player_list.append(self.player_sprite)
-        self.bullet_list = arcade.SpriteList()
-        # all sprites contains all of the lists of sprits created by arcade (contains the player list, bullet list and zombie list)
-        self.all_sprites['player'] = [self.player_list]
-        self.all_sprites['bullet'] = [self.bullet_list]
-        self.zombie_count = 1
-        self.zombie_modifiers = [1, .125, 1, 0]
-        self.modifiers['zombie'] = self.zombie_modifiers
-        """
-        self.all_sprites, self.zombie_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_modifiers)
+        self.all_sprites, self.zombie_modifiers = self.set_up.set_up_new(self.all_sprites, self.zombie_modifiers, self.level)
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
+        self.level = self.level + 1
+        self.new_round = True
     def on_draw(self):
         """ Render the screen. """
         arcade.start_render()
@@ -112,18 +106,48 @@ class Director(arcade.View):
         self.bullet_list.update()
         for zombie in self.zombie_list:
             zombie.follow_player(self.all_sprites)
-        self.zombie_modifiers = self.collision.bullet_zombie_collision(self.all_sprites, self.zombie_modifiers)
-        if len(self.zombie_list) == 0:
-            self.create_zombies()
+        self.zombie_modifiers, self.create_new_zombie = self.collision.bullet_zombie_collision(self.all_sprites, self.zombie_modifiers)
+        #if len(self.zombie_list) == 0:
+            #self.create_zombies()
+        self.create_zombies()
         self.collision.zombie_player_collision(self.all_sprites)
+        self.PhysicsEngineSimple = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['zombie'][0])
+        self.PhysicsEngineSimple.update()
+        if self.player_list[0].get_health() <= 0:
+            game_over = self.game_over
+            self.window.show_view(game_over)
+        # self.total_time = self.total_time - 1
+        # if self.total_time <= 0:
+        #     self.setup()
+        #     self.total_time = 600
 
     def create_zombies(self):
         """ creates a zombie when needed"""
-        for x in range(self.zombie_modifiers[0]):
-            zombie_sprite = Create_zombie(self.zombie_image, self.CHARACTER_SCALING, self.zombie_modifiers)
-            zombie_sprite.center_x = random.randint(0, self.SCREEN_WIDTH)
-            zombie_sprite.center_y = random.randint(0, self.SCREEN_HEIGHT)
-            self.zombie_list.append(zombie_sprite)
+        if self.new_round == True:
+            for x in range(self.zombie_modifiers[0]):
+                zombie_sprite = Create_zombie(self.zombie_image, self.CHARACTER_SCALING, self.zombie_modifiers)
+                zombie_sprite.center_x = random.randint(0, self.SCREEN_WIDTH)
+                zombie_sprite.center_y = random.randint(0, self.SCREEN_HEIGHT)
+                self.zombie_list.append(zombie_sprite)
+                self.new_round = False
+        if self.create_new_zombie != 0:
+            for x in range(0, self.create_new_zombie):
+                zombie_sprite = Create_zombie(self.zombie_image, self.CHARACTER_SCALING, self.zombie_modifiers)
+                location = random.randint(1,4)
+                if location == 1:
+                    zombie_sprite.center_x = random.randint(0, self.SCREEN_WIDTH)
+                    zombie_sprite.center_y = 0
+                if location == 2:
+                    zombie_sprite.center_x = 0
+                    zombie_sprite.center_y = random.randint(0, self.SCREEN_HEIGHT)
+                if location == 3:
+                    zombie_sprite.center_x = self.SCREEN_WIDTH
+                    zombie_sprite.center_y = random.randint(0, self.SCREEN_HEIGHT)
+                if location == 4:
+                    zombie_sprite.center_x = random.randint(0, self.SCREEN_WIDTH)
+                    zombie_sprite.center_y = self.SCREEN_HEIGHT
+                
+                self.zombie_list.append(zombie_sprite)
         self.all_sprites["zombie"] = [self.zombie_list]
 
     def execute(self):

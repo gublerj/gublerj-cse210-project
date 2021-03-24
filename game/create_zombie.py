@@ -11,6 +11,9 @@ class Create_zombie(arcade.Sprite):
         self.count = 0
         self.health = 100 * zombie_modifier[2]
         self.move_speed = zombie_modifier[1] * 2
+        self.hit_player = False
+        self.hit_count = 0
+        self.power = 1
 
     def update(self):
         """ Move the player """
@@ -22,6 +25,14 @@ class Create_zombie(arcade.Sprite):
         if self.count == 10:
             self.count = 0
             self.hit = False
+        if self.hit_player == True:
+            self.power = 0
+            self.hit_count = self.hit_count + 1
+        if self.hit_count == 30:
+            self.hit_player = False
+            self.power = 1
+            self.hit_count = 0
+
     def follow_player(self, player_sprites):
         """
         This function will move the current sprite towards whatever
@@ -60,4 +71,10 @@ class Create_zombie(arcade.Sprite):
     def set_health(self, health):
         self.health = self.health - health
         return self.health
+
+    def get_damage(self):
+        return self.power
+
+    def set_hit_player(self):
+        self.hit_player = True
             

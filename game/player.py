@@ -31,6 +31,8 @@ class Player(arcade.Sprite):
         elif self.top > self.SCREEN_HEIGHT - 1:
             self.top = self.SCREEN_HEIGHT - 1
 
+
+
     def player_damage(self, damage):
         """
         When zombie hits player, the player loses health
