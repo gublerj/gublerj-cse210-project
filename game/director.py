@@ -39,8 +39,8 @@ class Director(arcade.View):
         self.player = None
         self.game_over = GameOverView()
         self.level = 1
-        # 60 = 1 sec
-        #self.total_time = 60
+        #60 = 1 sec
+        self.total_time = 60
         #zombie modifiers contains a list used to change zombie stats so that we can make them better the farther we go
         #1 = number of zombies, .125 is a speed modifier
         self.zombie_modifiers = []
@@ -64,6 +64,7 @@ class Director(arcade.View):
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
+        self.wall_list = self.all_sprites['wall'][0]
 
 
         # Separate variable that holds the player sprite
@@ -112,14 +113,16 @@ class Director(arcade.View):
         self.create_zombies()
         self.collision.zombie_player_collision(self.all_sprites)
         self.PhysicsEngineSimple = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['zombie'][0])
+        self.PhysicsEngineSimple_2 = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['wall'][0])
         self.PhysicsEngineSimple.update()
+        self.PhysicsEngineSimple_2.update()
         if self.player_list[0].get_health() <= 0:
             game_over = self.game_over
             self.window.show_view(game_over)
-        # self.total_time = self.total_time - 1
-        # if self.total_time <= 0:
-        #     self.setup()
-        #     self.total_time = 600
+        self.total_time = self.total_time - 1
+        if self.total_time <= 0:
+            self.setup()
+            self.total_time = 600
 
     def create_zombies(self):
         """ creates a zombie when needed"""
@@ -131,6 +134,7 @@ class Director(arcade.View):
                 self.zombie_list.append(zombie_sprite)
                 self.new_round = False
         if self.create_new_zombie != 0:
+            print('enter')
             for x in range(0, self.create_new_zombie):
                 zombie_sprite = Create_zombie(self.zombie_image, self.CHARACTER_SCALING, self.zombie_modifiers)
                 location = random.randint(1,4)
