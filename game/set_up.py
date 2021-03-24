@@ -1,12 +1,19 @@
 import arcade
 from game.player import Player
 from game import constants
+import random
 
 class Set_up:
     def __init__(self):
         pass
 
-    def set_up_start(self, player_sprites, modifiers):
+    def execute(self, player_sprites, modifiers, level):
+        if level == 1:
+            self.set_up_start(player_sprites, modifiers)
+        else:
+            self.set_up_new(player_sprites, modifiers)
+
+    def set_up_start(self, player_sprites, modifiers, level):
         # Create the Sprite lists
         player_list = arcade.SpriteList()
         zombie_list = arcade.SpriteList()
@@ -22,3 +29,14 @@ class Set_up:
         zombie_count = 1
         zombie_modifiers = [1, .125, 1]
         return player_sprites, zombie_modifiers
+
+    def set_up_new(self, all_sprites, modifiers, level):
+        player = all_sprites['player'][0][0]
+        zombies = all_sprites['zombie'][0]
+        player.center_x = constants.SCREEN_WIDTH / 2
+        player.center_y = 0
+        all_sprites['player'][0][0] = player
+        all_sprites['zombie'][0] = zombies
+        return all_sprites, modifiers
+
+

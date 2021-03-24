@@ -13,6 +13,7 @@ class Collisions:
     def bullet_zombie_collision(self, player_sprites, zombie_modifier):
         """
         Check for collisions with the bullets and zombies and handle the collision
+        called in director in update method
         """
         bullet_list = player_sprites['bullet'][0]
         zombie_list = player_sprites['zombie'][0]
@@ -21,6 +22,7 @@ class Collisions:
         zombie_health_modifier = zombie_modifier[2]
         width = constants.SCREEN_WIDTH
         height = constants.SCREEN_HEIGHT
+        create_zombies = 0
         for bullet in bullet_list:
             # Check this bullet to see if it hit a coin
             hit_list = arcade.check_for_collision_with_list(bullet, zombie_list)
@@ -44,13 +46,19 @@ class Collisions:
                         zombie_count = zombie_count + 1
                     if x == 3:
                         zombie_health_modifier = zombie_health_modifier * 1.15
+                    zombie_count = random.randint(0,1)
+                    if zombie_count == 1:
+                        create_zombies = 2
+                    else:
+                        create_zombies = 1
+
                     
             # If the bullet flies off-screen, remove it.
             if bullet.bottom > width or bullet.top < 0 or bullet.right < 0 or bullet.left > width:
                 bullet.remove_from_sprite_lists()
 
         zombie_modifier = [zombie_count, move_modifier, zombie_health_modifier]
-        return zombie_modifier
+        return zombie_modifier, create_zombies
 
 
     def zombie_player_collision(self, player_sprites):
