@@ -15,6 +15,7 @@ class Collisions:
         Check for collisions with the bullets and zombies and handle the collision
         called in director in update method
         """
+        player = player_sprites['player'][0][0]
         bullet_list = player_sprites['bullet'][0]
         zombie_list = player_sprites['zombie'][0]
         zombie_count = zombie_modifier[0]
@@ -51,6 +52,7 @@ class Collisions:
                         create_zombies = 2
                     else:
                         create_zombies = 1
+                    player.add_score(1)
 
                     
             # If the bullet flies off-screen, remove it.

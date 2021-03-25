@@ -18,7 +18,7 @@ class Output_service:
         for bullet in bullets:
             bullet.draw()
         
-        # arcade.draw_text(f"Health: {player.get_health()}", 10, 20, arcade.color.WHITE, 14)
+        arcade.draw_text(f"Score: {player.get_score()}", 10, 630, arcade.color.WHITE, 14)
 
         # This code displays the health bar in the bottom left.
         self.player_max_hp = player.get_max_health()
