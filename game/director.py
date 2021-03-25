@@ -44,7 +44,7 @@ class Director(arcade.View):
         #zombie modifiers contains a list used to change zombie stats so that we can make them better the farther we go
         #1 = number of zombies, .125 is a speed modifier
         self.zombie_modifiers = []
-        self.zombie_base_modifiers = [1,2,3]
+        self.zombie_base_modifiers = [1,1.25,1]
         self.create_new_zombie = 0
         self.all_sprites = {}
         self.new_round = True
@@ -60,12 +60,14 @@ class Director(arcade.View):
         self.zombie_list = None
         self.bullet_list = None
         self.zombie_image = constants.zombie_image
-        self.all_sprites, self.zombie_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_base_modifiers, self.level)
+        self.all_sprites, self.zombie_base_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_base_modifiers, self.level)
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
         self.wall_list = self.all_sprites['wall'][0]
         self.obstical_list = self.all_sprites['obsticals'][0]
+        self.player = self.player_list[0]
+        self.zombie_modifiers = self.zombie_base_modifiers
 
 
         # Separate variable that holds the player sprite
@@ -75,12 +77,16 @@ class Director(arcade.View):
 
     def setup(self):
         """ Set up the game here. Call this function to restart the game. """
-        self.all_sprites, self.zombie_modifiers = self.set_up.set_up_new(self.all_sprites, self.zombie_modifiers, self.level)
+        self.all_sprites, self.zombie_base_modifiers = self.set_up.set_up_new(self.all_sprites, self.zombie_base_modifiers, self.level)
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
+        self.player = self.player_list[0]
         self.level = self.level + 1
+        self.zombie_modifiers = self.zombie_base_modifiers
+        print(self.zombie_modifiers)
         self.new_round = True
+        self.player.end_restart()
     def on_draw(self):
         """ Render the screen. """
         arcade.start_render()
@@ -109,8 +115,12 @@ class Director(arcade.View):
         for zombie in self.zombie_list:
             zombie.follow_player(self.all_sprites)
         self.zombie_modifiers, self.create_new_zombie = self.collision.bullet_zombie_collision(self.all_sprites, self.zombie_modifiers)
-        #if len(self.zombie_list) == 0:
-            #self.create_zombies()
+        if self.total_time <= 0:
+            self.create_new_zombie = 0
+            if len(self.all_sprites['zombie'][0]) == 0:
+                end = False
+                if self.player.end_point() == True:
+                    self.setup()
         self.create_zombies()
         self.collision.zombie_player_collision(self.all_sprites)
         self.PhysicsEngineSimple = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['zombie'][0])
@@ -124,9 +134,6 @@ class Director(arcade.View):
             game_over = self.game_over
             self.window.show_view(game_over)
         self.total_time = self.total_time - 1
-        if self.total_time <= 0:
-            self.setup()
-            self.total_time = 600
 
     def create_zombies(self):
         """ creates a zombie when needed"""
@@ -138,7 +145,6 @@ class Director(arcade.View):
                 self.zombie_list.append(zombie_sprite)
                 self.new_round = False
         if self.create_new_zombie != 0:
-            print('enter')
             for x in range(0, self.create_new_zombie):
                 zombie_sprite = Create_zombie(self.zombie_image, self.CHARACTER_SCALING, self.zombie_modifiers)
                 location = random.randint(1,4)

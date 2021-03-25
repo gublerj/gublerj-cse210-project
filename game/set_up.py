@@ -5,7 +5,10 @@ import random
 
 class Set_up:
     def __init__(self):
-        pass
+        self.condition = 0
+        self.wall_list = None
+        self.position_1 = 0
+        self.position_2 = 0
 
     def execute(self, player_sprites, modifiers, level):
         if level == 1:
@@ -61,13 +64,79 @@ class Set_up:
         zombie_modifiers = [1, .125, 1]
         return player_sprites, zombie_modifiers
 
-    def set_up_new(self, all_sprites, modifiers, level):
-        player = all_sprites['player'][0][0]
-        zombies = all_sprites['zombie'][0]
-        player.center_x = constants.SCREEN_WIDTH / 2
-        player.center_y = 0
-        all_sprites['player'][0][0] = player
-        all_sprites['zombie'][0] = zombies
-        return all_sprites, modifiers
+    def set_up_new(self, player_sprites, modifiers, level):
+        player_list = arcade.SpriteList()
+        zombie_list = arcade.SpriteList()
+        self.wall_list = arcade.SpriteList()
+        obstical_list = arcade.SpriteList()
+        player_sprite = Player(":resources:images/animated_characters/female_person/femalePerson_idle.png", constants.CHARACTER_SCALING)
+        player_sprite.center_x = constants.SCREEN_WIDTH / 2
+        player_sprite.center_y = 100
+        player_list.append(player_sprite)
+        bullet_list = arcade.SpriteList()
+        zombie_count = modifiers[0]
+        zombie_speed = modifiers[1]
+        zombie_health = modifiers[2]
+
+        option = random.randint(0,2)
+        if option == 0:
+            zombie_count = zombie_count * 2
+        elif option == 1:
+            zombie_speed = zombie_speed * 1.5
+        else:
+            zombie_health = zombie_health * 1.25
+
+
+        #create boarder or walls or boxes based off of previous position
+        for y in (0, constants.SCREEN_HEIGHT - constants.SPRITE_SIZE):
+            self.set_up_walls_y_hole(y)
+        for x in (0, constants.SCREEN_WIDTH - constants.SPRITE_SIZE):
+            self.set_up_walls_x_no_hole(x)
+
+        obstical = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", constants.CHARACTER_SCALING)
+        obstical.left = 7 * constants.SPRITE_SIZE
+        obstical.bottom = 5 *constants.SPRITE_SIZE
+        obstical_list.append(obstical)
+        self.wall_list.append(obstical)
+        # all sprites contains all of the lists of sprits created by arcade (contains the player list, bullet list and zombie list)
+        player_sprites['player'] = [player_list]
+        player_sprites['bullet'] = [bullet_list]
+        player_sprites['zombie'] = [zombie_list]
+        player_sprites['wall'] = [self.wall_list]
+        player_sprites['obsticals'] = [obstical_list]
+        zombie_modifiers = [zombie_count, zombie_speed, zombie_health]
+        return player_sprites, zombie_modifiers
+
+    def set_up_walls_x_hole(self, x):
+        for y in range(constants.SPRITE_SIZE, constants.SCREEN_HEIGHT - constants.SPRITE_SIZE, constants.SPRITE_SIZE):
+                # Skip making a block 4 and 5 blocks up on the right side
+                    if (y != constants.SPRITE_SIZE * 4 and x != constants.SPRITE_SIZE * 5):
+                        wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", constants.CHARACTER_SCALING)
+                        wall.left = x
+                        wall.bottom = y
+                        self.wall_list.append(wall)
+
+    def set_up_walls_x_no_hole(self, x):
+        for y in range(constants.SPRITE_SIZE, constants.SCREEN_HEIGHT - constants.SPRITE_SIZE, constants.SPRITE_SIZE):
+                    wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", constants.CHARACTER_SCALING)
+                    wall.left = x
+                    wall.bottom = y
+                    self.wall_list.append(wall)
+
+    def set_up_walls_y_hole(self, y):
+        for x in range(0, constants.SCREEN_WIDTH, constants.SPRITE_SIZE):
+                if (x != constants.SPRITE_SIZE * 8 and x != constants.SPRITE_SIZE * 7):
+                    wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", constants.CHARACTER_SCALING)
+                    wall.left = x
+                    wall.bottom = y
+                    self.wall_list.append(wall)
+
+    def set_up_wall_y_no_hole(self, y):
+        for x in range(0, constants.SCREEN_WIDTH, constants.SPRITE_SIZE):
+                wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", constants.CHARACTER_SCALING)
+                wall.left = x
+                wall.bottom = y
+                self.wall_list.append(wall)
+
 
 
