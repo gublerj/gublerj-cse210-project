@@ -11,6 +11,9 @@ class Output_service:
         bullets = actors['bullet'][0]
         walls = actors['wall'][0]
         obsticals = actors['obsticals'][0]
+        #weapon = actors['weapon'][0][0]
+
+        #weapon.draw()
         player.draw()
         for zombie in zombies:
             zombie.draw()

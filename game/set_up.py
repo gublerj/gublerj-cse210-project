@@ -107,6 +107,25 @@ class Set_up:
         zombie_modifiers = [zombie_count, zombie_speed, zombie_health]
         return player_sprites, zombie_modifiers
 
+    def upgrade_room(self, all_sprites):
+        weapon_list = arcade.SpriteList()
+        weapon = arcade.Sprite(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING)
+        weapon.center_x = constants.SCREEN_WIDTH / 2
+        weapon.center_y = constants.SCREEN_HEIGHT / 2
+        weapon_list.append(weapon)
+
+        for y in (0, constants.SCREEN_HEIGHT - constants.SPRITE_SIZE):
+            self.set_up_walls_y_hole(y)
+        for x in (0, constants.SCREEN_WIDTH - constants.SPRITE_SIZE):
+            self.set_up_walls_x_no_hole(x)
+
+        player_sprites['weapon'] = weapon_list
+
+        return player_sprites
+
+
+
+
     def set_up_walls_x_hole(self, x):
         for y in range(constants.SPRITE_SIZE, constants.SCREEN_HEIGHT - constants.SPRITE_SIZE, constants.SPRITE_SIZE):
                 # Skip making a block 4 and 5 blocks up on the right side

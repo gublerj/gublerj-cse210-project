@@ -9,6 +9,7 @@ class Player(arcade.Sprite):
         self.player_health = 10
         self.end = False
         self.restart = False
+        self.damage = 10
         #self._sprite = sprite
         #self.set_sprite(self._sprite)
         #self.set_position(constants.SCREEN_WIDTH / 2, 100)
@@ -62,3 +63,6 @@ class Player(arcade.Sprite):
 
     def end_restart(self):
         self.restart = True
+
+    def get_damage(self):
+        return self.damage

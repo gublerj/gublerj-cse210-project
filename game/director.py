@@ -39,8 +39,9 @@ class Director(arcade.View):
         self.player = None
         self.game_over = GameOverView()
         self.level = 1
+        self.room = 0
         #60 = 1 sec
-        self.total_time = 60
+        self.total_time = 600
         #zombie modifiers contains a list used to change zombie stats so that we can make them better the farther we go
         #1 = number of zombies, .125 is a speed modifier
         self.zombie_modifiers = []
@@ -78,15 +79,15 @@ class Director(arcade.View):
     def setup(self):
         """ Set up the game here. Call this function to restart the game. """
         self.all_sprites, self.zombie_base_modifiers = self.set_up.set_up_new(self.all_sprites, self.zombie_base_modifiers, self.level)
+        self.level = self.level + 1
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
         self.player = self.player_list[0]
-        self.level = self.level + 1
         self.zombie_modifiers = self.zombie_base_modifiers
-        print(self.zombie_modifiers)
         self.new_round = True
         self.player.end_restart()
+        self.room = self.room + 1
     def on_draw(self):
         """ Render the screen. """
         arcade.start_render()
@@ -109,6 +110,8 @@ class Director(arcade.View):
 
     def on_update(self, delta_time):
         """ Movement and game logic """
+        if self.new_round = True:
+            self.total_time = 600
         self.player_list.update()
         self.zombie_list.update()
         self.bullet_list.update()
