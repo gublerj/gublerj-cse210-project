@@ -1,5 +1,6 @@
 import arcade
 import math
+import random
 
 class Input_service:
     
@@ -63,8 +64,8 @@ class Input_service:
 
         # Taking into account the angle, calculate our change_x
         # and change_y. Velocity is how fast the bullet travels.
-        bullet.change_x = math.cos(angle) * BULLET_SPEED
-        bullet.change_y = math.sin(angle) * BULLET_SPEED
+        bullet.change_x = (math.cos(angle)) * BULLET_SPEED
+        bullet.change_y = (math.sin(angle)) * BULLET_SPEED
 
         # Add the bullet to the appropriate lists
         bullet_list.append(bullet)
