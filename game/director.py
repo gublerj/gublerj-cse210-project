@@ -41,7 +41,7 @@ class Director(arcade.View):
         self.level = 1
         self.room = 0
         #60 = 1 sec
-        self.total_time = 600
+        self.total_time = 60
         #zombie modifiers contains a list used to change zombie stats so that we can make them better the farther we go
         #1 = number of zombies, .125 is a speed modifier
         self.zombie_modifiers = []

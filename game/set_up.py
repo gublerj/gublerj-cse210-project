@@ -65,11 +65,12 @@ class Set_up:
         return player_sprites, zombie_modifiers
 
     def set_up_new(self, player_sprites, modifiers, level):
+        player_sprite = player_sprites['player'][0][0]
         player_list = arcade.SpriteList()
         zombie_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
         obstical_list = arcade.SpriteList()
-        player_sprite = Player(":resources:images/animated_characters/female_person/femalePerson_idle.png", constants.CHARACTER_SCALING)
+        # player_sprite = Player(":resources:images/animated_characters/female_person/femalePerson_idle.png", constants.CHARACTER_SCALING)
         player_sprite.center_x = constants.SCREEN_WIDTH / 2
         player_sprite.center_y = 100
         player_list.append(player_sprite)
