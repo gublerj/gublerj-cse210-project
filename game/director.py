@@ -110,7 +110,7 @@ class Director(arcade.View):
 
     def on_update(self, delta_time):
         """ Movement and game logic """
-        if self.new_round = True:
+        if self.new_round == True:
             self.total_time = 600
         self.player_list.update()
         self.zombie_list.update()
