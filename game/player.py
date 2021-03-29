@@ -7,6 +7,8 @@ class Player(arcade.Sprite):
     def __init__(self, sprite, scaling):
         super().__init__(sprite, scaling)
         self.player_health = 10
+        self.max_health = self.player_health
+        self.score = 0
         self.end = False
         self.restart = False
         self.damage = 10
@@ -58,6 +60,18 @@ class Player(arcade.Sprite):
         
         return self.player_health
 
+    def get_max_health(self):
+        """
+        Returns the player's max health. This is used for the health bar.
+        """
+        return self.max_health
+
+    def add_score(self, points):
+        self.score += points
+
+    def get_score(self):
+        return self.score
+      
     def end_point(self):
         return self.end
 
