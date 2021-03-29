@@ -18,6 +18,7 @@ class Collisions:
         player = player_sprites['player'][0][0]
         bullet_list = player_sprites['bullet'][0]
         zombie_list = player_sprites['zombie'][0]
+        walls = player_sprites['wall'][0]
         zombie_count = zombie_modifier[0]
         move_modifier = zombie_modifier[1]
         zombie_health_modifier = zombie_modifier[2]
@@ -27,9 +28,13 @@ class Collisions:
         for bullet in bullet_list:
             # Check this bullet to see if it hit a coin
             hit_list = arcade.check_for_collision_with_list(bullet, zombie_list)
+            wall_hit_list = arcade.check_for_collision_with_list(bullet, walls)
 
             # If it did, get rid of the bullet
             if len(hit_list) > 0:
+                bullet.remove_from_sprite_lists()
+            
+            if len(wall_hit_list) > 0:
                 bullet.remove_from_sprite_lists()
 
             # For every coin we hit, add to the score and remove the coin

@@ -9,6 +9,9 @@ class Player(arcade.Sprite):
         self.player_health = 10
         self.max_health = self.player_health
         self.score = 0
+        self.end = False
+        self.restart = False
+        self.damage = 10
         #self._sprite = sprite
         #self.set_sprite(self._sprite)
         #self.set_position(constants.SCREEN_WIDTH / 2, 100)
@@ -25,13 +28,21 @@ class Player(arcade.Sprite):
         # Check for out-of-bounds
         if self.left < 0:
             self.left = 0
+            self.end = True
         elif self.right > self.SCREEN_WIDTH - 1:
             self.right = self.SCREEN_WIDTH - 1
+            self.end = True
 
         if self.bottom < 0:
             self.bottom = 0
+            self.end = True
         elif self.top > self.SCREEN_HEIGHT - 1:
             self.top = self.SCREEN_HEIGHT - 1
+            self.end = True
+        if self.restart == True:
+            self.end = False
+            self.restart = False
+
 
 
 
@@ -60,3 +71,12 @@ class Player(arcade.Sprite):
 
     def get_score(self):
         return self.score
+      
+    def end_point(self):
+        return self.end
+
+    def end_restart(self):
+        self.restart = True
+
+    def get_damage(self):
+        return self.damage
