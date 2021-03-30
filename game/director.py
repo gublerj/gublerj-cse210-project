@@ -41,7 +41,7 @@ class Director(arcade.View):
         self.level = 1
         self.room = 0
         #60 = 1 sec
-        self.total_time = 60
+        self.total_time = 600
         #zombie modifiers contains a list used to change zombie stats so that we can make them better the farther we go
         #1 = number of zombies, .125 is a speed modifier
         self.zombie_modifiers = []
@@ -147,6 +147,7 @@ class Director(arcade.View):
                 zombie_sprite.center_y = random.randint(0, self.SCREEN_HEIGHT)
                 self.zombie_list.append(zombie_sprite)
                 self.new_round = False
+                self.total_time = 600
         if self.create_new_zombie != 0:
             for x in range(0, self.create_new_zombie):
                 zombie_sprite = Create_zombie(self.zombie_image, self.CHARACTER_SCALING, self.zombie_modifiers)
