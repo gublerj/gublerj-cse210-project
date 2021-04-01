@@ -1,6 +1,7 @@
 import arcade
 from game.player import Player
 from game import constants
+from game.upgrade import Upgrade
 import random
 
 class Set_up:
@@ -124,9 +125,37 @@ class Set_up:
 
     def upgrade_room(self, player_sprites):
         weapon_list = arcade.SpriteList()
-        weapon = arcade.Sprite(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING)
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'power')
+        weapon.center_x = constants.SCREEN_WIDTH / 2 - 5
+        weapon.center_y = constants.SCREEN_HEIGHT / 2 - 5
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'power')
+        weapon.center_x = constants.SCREEN_WIDTH / 2 + 5
+        weapon.center_y = constants.SCREEN_HEIGHT / 2 - 5
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'power')
         weapon.center_x = constants.SCREEN_WIDTH / 2
         weapon.center_y = constants.SCREEN_HEIGHT / 2
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'speed')
+        weapon.center_x = constants.SCREEN_WIDTH / 3 - 5
+        weapon.center_y = constants.SCREEN_HEIGHT / 2 + 5
+        weapon.angle -= 45
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'speed')
+        weapon.center_x = constants.SCREEN_WIDTH / 3
+        weapon.center_y = constants.SCREEN_HEIGHT / 2
+        weapon.angle -= 45
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'speed')
+        weapon.center_x = constants.SCREEN_WIDTH / 3 + 5
+        weapon.center_y = constants.SCREEN_HEIGHT / 2 - 5
+        weapon.angle -= 45
         weapon_list.append(weapon)
 
         player_sprite = player_sprites['player'][0][0]
