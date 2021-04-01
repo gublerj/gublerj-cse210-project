@@ -12,6 +12,17 @@ class Player(arcade.Sprite):
         self.end = False
         self.restart = False
         self.damage = 10
+        self.character_face_direction = constants.RIGHT_FACING
+        self.cur_texture = 0
+        self.scale = constants.CHARACTER_SCALING
+        self.main_path = ":resources:images/animated_characters/female_person/femalePerson"
+        self.idle_texture_pair = self.load_texture_pair(f"{self.main_path}_idle.png")
+
+        self.walk_textures = []
+        for i in range(8):
+            texture = self.load_texture_pair(f"{self.main_path}_walk{i}.png")
+            self.walk_textures.append(texture)
+
         #self._sprite = sprite
         #self.set_sprite(self._sprite)
         #self.set_position(constants.SCREEN_WIDTH / 2, 100)
@@ -80,3 +91,35 @@ class Player(arcade.Sprite):
 
     def get_damage(self):
         return self.damage
+
+    def load_texture_pair(self, filename):
+        """
+        Loads the same texture with one version flipped horizontally
+        """
+        return [
+            arcade.load_texture(filename),
+            arcade.load_texture(filename, flipped_horizontally=True)
+        ]
+
+    def player_animation(self, delta_time: float = 1/60):
+        """
+        This function deals with the player animations
+        """
+        # Figure out if we need to flip face left or right
+        if self.change_x < 0 and self.character_face_direction == constants.RIGHT_FACING:
+            self.character_face_direction = constants.LEFT_FACING
+        elif self.change_x > 0 and self.character_face_direction == constants.LEFT_FACING:
+            self.character_face_direction = constants.RIGHT_FACING
+
+        # Idle animation
+        if self.change_x == 0 and self.change_y == 0:
+            self.texture = self.idle_texture_pair[self.character_face_direction]
+            return
+
+        # Walking animation
+        self.cur_texture += 1
+        if self.cur_texture > 7 * constants.UPDATES_PER_FRAME:
+            self.cur_texture = 0
+        frame = self.cur_texture // constants.UPDATES_PER_FRAME
+        direction = self.character_face_direction
+        self.texture = self.walk_textures[frame][direction]

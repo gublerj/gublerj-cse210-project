@@ -116,6 +116,7 @@ class Director(arcade.View):
 
     def on_update(self, delta_time):
         """ Movement and game logic """
+        self.player.player_animation()
         if self.new_round == True:
             self.total_time = 600
         self.player_list.update()
@@ -123,6 +124,7 @@ class Director(arcade.View):
         self.bullet_list.update()
         for zombie in self.zombie_list:
             zombie.follow_player(self.all_sprites)
+            zombie.zombie_animation()
         self.zombie_modifiers, self.create_new_zombie = self.collision.bullet_zombie_collision(self.all_sprites, self.zombie_modifiers)
         if self.total_time <= 0:
             self.create_new_zombie = 0
