@@ -8,16 +8,18 @@ class Output_service:
         self.HEALTHBAR_WIDTH = 70
         # self.player_max_hp = player.get_health()
 
-    def execute(self, actors):
-        player = actors['player'][0][0]
+    def execute(self, actors, actor_list):
+        players = actors['player'][0]
         zombies = actors['zombie'][0]
         bullets = actors['bullet'][0]
         walls = actors['wall'][0]
         obsticals = actors['obsticals'][0]
-        #weapon = actors['weapon'][0][0]
+        weapons = actors['weapon'][0]
 
-        #weapon.draw()
-        player.draw()
+        for weapon in weapons:
+            weapon.draw()
+        for player in players:
+            player.draw()
         for zombie in zombies:
             zombie.draw()
         for bullet in bullets:
@@ -26,6 +28,15 @@ class Output_service:
             wall.draw() 
         for obstical in obsticals:
             obstical.draw()
+        # for count in range(0, len(actor_list)):
+        #     if len(actors[actor_list[count]][0]) == 0:
+        #         actors[actor_list[count]][0][0].draw()
+        #     else:
+        #         for number in range(0, len(actors[actor_list[count]][0])):
+        #             if actors[actor_list[count]][0][number] == -1:
+        #                 pass
+        #             else:
+        #                 actors[actor_list[count]][0][number].draw()
         
         arcade.draw_text(f"Score: {player.get_score()}", 10, 630, arcade.color.WHITE, 14)
 

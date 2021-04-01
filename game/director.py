@@ -60,6 +60,7 @@ class Director(arcade.View):
         self.player_list = None
         self.zombie_list = None
         self.bullet_list = None
+        self.weapon_list = None
         self.zombie_image = constants.zombie_image
         self.all_sprites, self.zombie_base_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_base_modifiers, self.level)
         self.player_list = self.all_sprites['player'][0]
@@ -67,8 +68,10 @@ class Director(arcade.View):
         self.bullet_list = self.all_sprites['bullet'][0]
         self.wall_list = self.all_sprites['wall'][0]
         self.obstical_list = self.all_sprites['obsticals'][0]
+        self.weapon_list = self.all_sprites['weapon'][0]
         self.player = self.player_list[0]
         self.zombie_modifiers = self.zombie_base_modifiers
+        self.sprite_list = 'player', 'zombie', 'wall', 'obsticals'
 
 
         # Separate variable that holds the player sprite
@@ -78,20 +81,23 @@ class Director(arcade.View):
 
     def setup(self):
         """ Set up the game here. Call this function to restart the game. """
-        self.all_sprites, self.zombie_base_modifiers = self.set_up.set_up_new(self.all_sprites, self.zombie_base_modifiers, self.level)
-        self.level = self.level + 1
+        if self.room % 2 == 0:
+            self.all_sprites = self.set_up.upgrade_room(self.all_sprites)
+        else:
+            self.all_sprites, self.zombie_base_modifiers = self.set_up.set_up_new(self.all_sprites, self.zombie_base_modifiers, self.level)
+            self.level = self.level + 1
+            self.new_round = True
+            self.player.end_restart()
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
         self.player = self.player_list[0]
         self.zombie_modifiers = self.zombie_base_modifiers
-        self.new_round = True
-        self.player.end_restart()
         self.room = self.room + 1
     def on_draw(self):
         """ Render the screen. """
         arcade.start_render()
-        self.output_service.execute(self.all_sprites)
+        self.output_service.execute(self.all_sprites, self.sprite_list)
         #self.bullet_list.draw()
     
     def on_key_press(self, key, modifiers):
@@ -123,6 +129,7 @@ class Director(arcade.View):
             if len(self.all_sprites['zombie'][0]) == 0:
                 end = False
                 if self.player.end_point() == True:
+                    self.player.end_restart()
                     self.setup()
         self.create_zombies()
         self.collision.zombie_player_collision(self.all_sprites)
