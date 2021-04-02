@@ -84,5 +84,6 @@ class Player(arcade.Sprite):
 
     def set_damage(self, damage):
         self.damage = damage
+        
     def add_modifier(self, modifier):
         self.score_modifier = modifier
