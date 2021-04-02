@@ -69,7 +69,7 @@ class Set_up:
         player_sprites['obsticals'] = [obstical_list]
         player_sprites['weapon'] = [weapon_list]
         zombie_count = 1
-        zombie_modifiers = [1, .125, 1]
+        zombie_modifiers = [1, .125, 1, 1]
         return player_sprites, zombie_modifiers
 
     def set_up_new(self, player_sprites, modifiers, level):
@@ -98,8 +98,10 @@ class Set_up:
             zombie_count = zombie_count * 2
         elif option == 1:
             zombie_speed = zombie_speed * 1.5
+            player_sprite.add_modifier(1)
         else:
             zombie_health = zombie_health * 1.25
+            player_sprite.add_modifier(1)
 
 
         #create boarder or walls or boxes based off of previous position

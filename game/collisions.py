@@ -1,5 +1,6 @@
 import arcade
 import random
+from game.create_bullets import Create_bullet
 from game import constants
 
 class Collisions:
@@ -7,7 +8,7 @@ class Collisions:
     def __init__(self):
         self.center_x = None
         self.center_y = None
-        pass
+        self.did_hit = False
 
 
     def bullet_zombie_collision(self, player_sprites, zombie_modifier):
@@ -42,7 +43,7 @@ class Collisions:
                 zombie.change_x = 0
                 zombie.change_y = 0
                 zombie.set_hit(True)
-                zombie_health = zombie.set_health(10)
+                zombie_health = zombie.set_health(player.get_damage())
                 if zombie_health <= 0:
                     zombie.remove_from_sprite_lists()
                     x = random.randint(0, 10)
@@ -57,7 +58,7 @@ class Collisions:
                         create_zombies = 2
                     else:
                         create_zombies = 1
-                    player.add_score(1)
+                    player.add_score(100)
 
                     
             # If the bullet flies off-screen, remove it.
@@ -84,4 +85,32 @@ class Collisions:
             if len(hit_list) > 0:
                 player_sprite.player_damage(zombie.get_damage())
                 zombie.set_hit_player()
+
+    def player_upgrade_collision(self, player_sprites, bullet):
+        weapon_list = player_sprites['weapon'][0]
+        player_sprite = player_sprites['player'][0]
+        player = player_sprites['player'][0][0]
+        for weapon in weapon_list:
+            hit_list = arcade.check_for_collision_with_list(weapon, player_sprite)
+
+            if len(hit_list) > 0:
+                name = weapon.get_name()
+                if self.did_hit == False:
+                    if name == 'speed':
+                        speed = bullet.get_fire_rate()
+                        bullet.set_fire_rate(speed - 1)
+                    elif name == 'power':
+                        power = player.get_damage()
+                        player.set_damage(power + 10)
+                    self.did_hit = True
+
+
+                for weapons in weapon_list:
+                    weapons.remove_from_sprite_lists()
+
+    def restart(self):
+        self.did_hit = False
+            
+
+
                 
