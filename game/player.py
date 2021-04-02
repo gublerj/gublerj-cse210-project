@@ -12,6 +12,7 @@ class Player(arcade.Sprite):
         self.end = False
         self.restart = False
         self.damage = 10
+        self.score_modifier = 0
         #self._sprite = sprite
         #self.set_sprite(self._sprite)
         #self.set_position(constants.SCREEN_WIDTH / 2, 100)
@@ -67,7 +68,7 @@ class Player(arcade.Sprite):
         return self.max_health
 
     def add_score(self, points):
-        self.score += points
+        self.score += points * (1 + (self.score_modifier / 10))
 
     def get_score(self):
         return self.score
@@ -80,3 +81,8 @@ class Player(arcade.Sprite):
 
     def get_damage(self):
         return self.damage
+
+    def set_damage(self, damage):
+        self.damage = damage
+    def add_modifier(self, modifier):
+        self.score_modifier = modifier

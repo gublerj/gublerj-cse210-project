@@ -12,6 +12,7 @@ from game.input_service import Input_service
 from game.collisions import Collisions
 from game.set_up import Set_up
 from game.game_over import GameOverView
+from game.create_bullets import Create_bullet
 
 
 class Director(arcade.View):
@@ -45,7 +46,7 @@ class Director(arcade.View):
         #zombie modifiers contains a list used to change zombie stats so that we can make them better the farther we go
         #1 = number of zombies, .125 is a speed modifier
         self.zombie_modifiers = []
-        self.zombie_base_modifiers = [1,1.25,1]
+        self.zombie_base_modifiers = [1,1.25,1, 1]
         self.create_new_zombie = 0
         self.all_sprites = {}
         self.new_round = True
@@ -73,6 +74,8 @@ class Director(arcade.View):
         self.zombie_modifiers = self.zombie_base_modifiers
         self.sprite_list = 'player', 'zombie', 'wall', 'obsticals'
 
+        self.bullets = Create_bullet()
+
 
         # Separate variable that holds the player sprite
         self.player_sprite = None
@@ -88,6 +91,7 @@ class Director(arcade.View):
             self.level = self.level + 1
             self.new_round = True
             self.player.end_restart()
+            self.collision.restart()
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
@@ -111,8 +115,15 @@ class Director(arcade.View):
 
     def on_mouse_press(self, x, y, button, modifiers):
         """ Called whenever the mouse button is clicked. """
+        self.bullets.start_shooting()
+        #self.all_sprites = self.input_service.on_click(x, y, button, modifiers, self.all_sprites, self.BULLET_SPEED, self.SPRITE_SCALING_LASER)
 
-        self.all_sprites = self.input_service.on_click(x, y, button, modifiers, self.all_sprites, self.BULLET_SPEED, self.SPRITE_SCALING_LASER)
+    def on_mouse_release(self, x, y, button, modifiers):
+        self.bullets.cease_fire()
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        self.bullets.set_x(x)
+        self.bullets.set_y(y)
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -121,6 +132,7 @@ class Director(arcade.View):
         self.player_list.update()
         self.zombie_list.update()
         self.bullet_list.update()
+        self.bullets.make_bullet(self.all_sprites)
         for zombie in self.zombie_list:
             zombie.follow_player(self.all_sprites)
         self.zombie_modifiers, self.create_new_zombie = self.collision.bullet_zombie_collision(self.all_sprites, self.zombie_modifiers)
@@ -143,6 +155,7 @@ class Director(arcade.View):
         if self.player_list[0].get_health() <= 0:
             game_over = self.game_over
             self.window.show_view(game_over)
+        self.collision.player_upgrade_collision(self.all_sprites, self.bullets)
         self.total_time = self.total_time - 1
 
     def create_zombies(self):
