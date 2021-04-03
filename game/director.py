@@ -24,7 +24,7 @@ class Director(arcade.View):
         """
         initialized the Director
         """
-        #import the constants and all classes that are going to be used
+        #import the constants
         self.SCREEN_HEIGHT = constants.SCREEN_HEIGHT
         self.SCREEN_WIDTH = constants.SCREEN_WIDTH
         self.SCREEN_TITLE = constants.SCREEN_TITLE
@@ -32,13 +32,17 @@ class Director(arcade.View):
         self.SPRITE_SCALING_LASER = constants.SPRITE_SCALING_LASER
         self.BULLET_SPEED = constants.BULLET_SPEED
         self.player_movement_speed = constants.STARTING_PLAYER_MOVEMENT_SPEED
+        self.zombie_image = constants.zombie_image
+
+        #imports classes
         self.output_service = Output_service()
         self.input_service = Input_service()
         self.collision = Collisions()
         self.set_up = Set_up()
-        self.create_zombie = None
-        self.player = None
+        self.bullets = Create_bullet()
         self.game_over = GameOverView()
+
+        #creats variables that will be used
         self.level = 1
         self.room = 0
         #60 = 1 sec
@@ -62,7 +66,11 @@ class Director(arcade.View):
         self.zombie_list = None
         self.bullet_list = None
         self.weapon_list = None
-        self.zombie_image = constants.zombie_image
+        self.create_zombie = None
+        self.player = None
+        self.player_sprite = None
+
+        #sets up the first level
         self.all_sprites, self.zombie_base_modifiers = self.set_up.set_up_start(self.all_sprites, self.zombie_base_modifiers, self.level)
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
@@ -72,18 +80,12 @@ class Director(arcade.View):
         self.weapon_list = self.all_sprites['weapon'][0]
         self.player = self.player_list[0]
         self.zombie_modifiers = self.zombie_base_modifiers
-        self.sprite_list = 'player', 'zombie', 'wall', 'obsticals'
-
-        self.bullets = Create_bullet()
-
-
-        # Separate variable that holds the player sprite
-        self.player_sprite = None
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
         """ Set up the game here. Call this function to restart the game. """
+        #determis if the room is an upgrade room or a level
         if self.room % 2 == 0:
             self.all_sprites = self.set_up.upgrade_room(self.all_sprites)
         else:
@@ -92,16 +94,18 @@ class Director(arcade.View):
             self.new_round = True
             self.player.end_restart()
             self.collision.restart()
+        # reassigns the lists and variables that change from level to lever or that are reset
         self.player_list = self.all_sprites['player'][0]
         self.zombie_list = self.all_sprites['zombie'][0]
         self.bullet_list = self.all_sprites['bullet'][0]
         self.player = self.player_list[0]
         self.zombie_modifiers = self.zombie_base_modifiers
         self.room = self.room + 1
+
     def on_draw(self):
         """ Render the screen. """
         arcade.start_render()
-        self.output_service.execute(self.all_sprites, self.sprite_list)
+        self.output_service.execute(self.all_sprites)
         #self.bullet_list.draw()
     
     def on_key_press(self, key, modifiers):
@@ -119,23 +123,44 @@ class Director(arcade.View):
         #self.all_sprites = self.input_service.on_click(x, y, button, modifiers, self.all_sprites, self.BULLET_SPEED, self.SPRITE_SCALING_LASER)
 
     def on_mouse_release(self, x, y, button, modifiers):
+        """called whenever teh mouse button is realeased"""
         self.bullets.cease_fire()
 
     def on_mouse_motion(self, x, y, dx, dy):
+        """updates as the mouse moves accross the screen"""
         self.bullets.set_x(x)
         self.bullets.set_y(y)
 
     def on_update(self, delta_time):
         """ Movement and game logic """
+        # resets  the timer for the round
         if self.new_round == True:
-            self.total_time = 600
+            self.total_time = 600 + (30 * self.level)
+        
+        #updates the individual lists
         self.player_list.update()
         self.zombie_list.update()
         self.bullet_list.update()
-        self.bullets.make_bullet(self.all_sprites)
         for zombie in self.zombie_list:
             zombie.follow_player(self.all_sprites)
+
+        #creates the bullets from the player
+        self.bullets.make_bullet(self.all_sprites)
+
+        #check for collisions
         self.zombie_modifiers, self.create_new_zombie = self.collision.bullet_zombie_collision(self.all_sprites, self.zombie_modifiers)
+        self.collision.zombie_player_collision(self.all_sprites)
+        self.collision.player_upgrade_collision(self.all_sprites, self.bullets)
+
+        #creates and updates physics engines
+        self.PhysicsEngineSimple = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['zombie'][0])
+        self.PhysicsEngineSimple_2 = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['wall'][0])
+        for zombie in self.all_sprites['zombie'][0]:
+            physics = arcade.PhysicsEngineSimple(zombie, self.all_sprites['obsticals'][0])
+            physics.update()
+        self.PhysicsEngineSimple.update()
+        self.PhysicsEngineSimple_2.update()
+        
         if self.total_time <= 0:
             self.create_new_zombie = 0
             if len(self.all_sprites['zombie'][0]) == 0:
@@ -144,18 +169,9 @@ class Director(arcade.View):
                     self.player.end_restart()
                     self.setup()
         self.create_zombies()
-        self.collision.zombie_player_collision(self.all_sprites)
-        self.PhysicsEngineSimple = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['zombie'][0])
-        self.PhysicsEngineSimple_2 = arcade.PhysicsEngineSimple(self.all_sprites['player'][0][0], self.all_sprites['wall'][0])
-        for zombie in self.all_sprites['zombie'][0]:
-            physics = arcade.PhysicsEngineSimple(zombie, self.all_sprites['obsticals'][0])
-            physics.update()
-        self.PhysicsEngineSimple.update()
-        self.PhysicsEngineSimple_2.update()
         if self.player_list[0].get_health() <= 0:
             game_over = self.game_over
             self.window.show_view(game_over)
-        self.collision.player_upgrade_collision(self.all_sprites, self.bullets)
         self.total_time = self.total_time - 1
 
     def create_zombies(self):

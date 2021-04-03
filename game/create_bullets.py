@@ -12,7 +12,7 @@ class Create_bullet:
         self.cooldown = self.fire_rate
 
     def make_bullet(self, player_sprites):
-        """work"""
+        """makes the bullets at a given speed"""
         if self.fire == True:
             if self.cooldown == 0:
                 # Create a bullet
@@ -20,11 +20,9 @@ class Create_bullet:
 
                 player_sprite = player_sprites["player"][0][0]
                 bullet_list = player_sprites['bullet'][0]
-                # Position the bullet at the player's current location
+                # gets the starting position of the bullet
                 start_x = player_sprite.center_x
                 start_y = player_sprite.center_y
-                bullet.center_x = start_x
-                bullet.center_y = start_y
 
                 # Get from the mouse the destination location for the bullet
                 # IMPORTANT! If you have a scrolling screen, you will also need
@@ -47,6 +45,12 @@ class Create_bullet:
                 # and change_y. Velocity is how fast the bullet travels.
                 bullet.change_x = (math.cos(angle)) * constants.BULLET_SPEED
                 bullet.change_y = (math.sin(angle)) * constants.BULLET_SPEED
+
+
+                #moves the start position to a little infront of the player
+                #We are doing this due to glitches that occur
+                bullet.center_x = start_x + bullet.change_x
+                bullet.center_y = start_y + bullet.change_y
 
                 # Add the bullet to the appropriate lists
                 bullet_list.append(bullet)
