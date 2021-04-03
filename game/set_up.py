@@ -1,6 +1,7 @@
 import arcade
 from game.player import Player
 from game import constants
+from game.upgrade import Upgrade
 import random
 
 class Set_up:
@@ -68,7 +69,7 @@ class Set_up:
         player_sprites['obsticals'] = [obstical_list]
         player_sprites['weapon'] = [weapon_list]
         zombie_count = 1
-        zombie_modifiers = [1, .125, 1]
+        zombie_modifiers = [1, .125, 1, 1]
         return player_sprites, zombie_modifiers
 
     def set_up_new(self, player_sprites, modifiers, level):
@@ -97,8 +98,10 @@ class Set_up:
             zombie_count = zombie_count * 2
         elif option == 1:
             zombie_speed = zombie_speed * 1.5
+            player_sprite.add_modifier(1)
         else:
             zombie_health = zombie_health * 1.25
+            player_sprite.add_modifier(1)
 
 
         #create boarder or walls or boxes based off of previous position
@@ -124,9 +127,37 @@ class Set_up:
 
     def upgrade_room(self, player_sprites):
         weapon_list = arcade.SpriteList()
-        weapon = arcade.Sprite(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING)
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'power')
+        weapon.center_x = constants.SCREEN_WIDTH / 2 - 5
+        weapon.center_y = constants.SCREEN_HEIGHT / 2 - 5
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'power')
+        weapon.center_x = constants.SCREEN_WIDTH / 2 + 5
+        weapon.center_y = constants.SCREEN_HEIGHT / 2 - 5
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'power')
         weapon.center_x = constants.SCREEN_WIDTH / 2
         weapon.center_y = constants.SCREEN_HEIGHT / 2
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'speed')
+        weapon.center_x = constants.SCREEN_WIDTH / 3 - 5
+        weapon.center_y = constants.SCREEN_HEIGHT / 2 + 5
+        weapon.angle -= 45
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'speed')
+        weapon.center_x = constants.SCREEN_WIDTH / 3
+        weapon.center_y = constants.SCREEN_HEIGHT / 2
+        weapon.angle -= 45
+        weapon_list.append(weapon)
+
+        weapon = Upgrade(':resources:images/space_shooter/laserRed01.png', constants.CHARACTER_SCALING, 'speed')
+        weapon.center_x = constants.SCREEN_WIDTH / 3 + 5
+        weapon.center_y = constants.SCREEN_HEIGHT / 2 - 5
+        weapon.angle -= 45
         weapon_list.append(weapon)
 
         player_sprite = player_sprites['player'][0][0]

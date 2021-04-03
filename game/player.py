@@ -23,6 +23,8 @@ class Player(arcade.Sprite):
             texture = self.load_texture_pair(f"{self.main_path}_walk{i}.png")
             self.walk_textures.append(texture)
 
+        self.score_modifier = 0
+
         #self._sprite = sprite
         #self.set_sprite(self._sprite)
         #self.set_position(constants.SCREEN_WIDTH / 2, 100)
@@ -78,7 +80,7 @@ class Player(arcade.Sprite):
         return self.max_health
 
     def add_score(self, points):
-        self.score += points
+        self.score += points * (1 + (self.score_modifier / 10))
 
     def get_score(self):
         return self.score
@@ -123,3 +125,9 @@ class Player(arcade.Sprite):
         frame = self.cur_texture // constants.UPDATES_PER_FRAME
         direction = self.character_face_direction
         self.texture = self.walk_textures[frame][direction]
+
+    def set_damage(self, damage):
+        self.damage = damage
+        
+    def add_modifier(self, modifier):
+        self.score_modifier = modifier
