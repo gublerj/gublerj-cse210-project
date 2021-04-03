@@ -8,7 +8,7 @@ class Output_service:
         self.HEALTHBAR_WIDTH = 70
         # self.player_max_hp = player.get_health()
 
-    def execute(self, actors, actor_list):
+    def execute(self, actors):
         players = actors['player'][0]
         zombies = actors['zombie'][0]
         bullets = actors['bullet'][0]

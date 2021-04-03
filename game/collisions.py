@@ -38,12 +38,13 @@ class Collisions:
             if len(wall_hit_list) > 0:
                 bullet.remove_from_sprite_lists()
 
-            # For every coin we hit, add to the score and remove the coin
+            # For every zombie that is hit, reduce health of zombie
             for zombie in hit_list:
                 zombie.change_x = 0
                 zombie.change_y = 0
                 zombie.set_hit(True)
                 zombie_health = zombie.set_health(player.get_damage())
+                # if the zombie dies, check to see if we upgrade the zombie and add a score
                 if zombie_health <= 0:
                     zombie.remove_from_sprite_lists()
                     x = random.randint(0, 10)
@@ -78,6 +79,7 @@ class Collisions:
         player_sprite = player[0]
         zombie_list = player_sprites['zombie'][0]
 
+        #if the player is hit by the zombie reduce the player's health
         for zombie in zombie_list:
 
             hit_list = arcade.check_for_collision_with_list(zombie, player)
@@ -87,6 +89,7 @@ class Collisions:
                 zombie.set_hit_player()
 
     def player_upgrade_collision(self, player_sprites, bullet):
+        """If the player interacts with an upgrade, give him the upgrade"""
         weapon_list = player_sprites['weapon'][0]
         player_sprite = player_sprites['player'][0]
         player = player_sprites['player'][0][0]
@@ -109,6 +112,7 @@ class Collisions:
                     weapons.remove_from_sprite_lists()
 
     def restart(self):
+        """restarts the upgrades so that we can get more"""
         self.did_hit = False
             
 
