@@ -40,7 +40,6 @@ class Director(arcade.View):
         self.collision = Collisions()
         self.set_up = Set_up()
         self.bullets = Create_bullet()
-        self.game_over = GameOverView()
 
         #creats variables that will be used
         self.level = 1
@@ -174,7 +173,7 @@ class Director(arcade.View):
                     self.setup()
         self.create_zombies()
         if self.player_list[0].get_health() <= 0:
-            game_over = self.game_over
+            game_over = GameOverView(self.player.get_score())
             self.window.show_view(game_over)
         self.total_time = self.total_time - 1
 

@@ -95,7 +95,7 @@ class Set_up:
 
         option = random.randint(0,2)
         if option == 0:
-            zombie_count = zombie_count * 2
+            zombie_count = zombie_count + 2
         elif option == 1:
             zombie_speed = zombie_speed * 1.5
             player_sprite.add_modifier(1)

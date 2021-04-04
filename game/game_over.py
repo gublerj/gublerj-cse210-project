@@ -1,9 +1,9 @@
 import arcade
 from game import constants
 class GameOverView(arcade.View):
-    def __init__(self):
+    def __init__(self, score):
         super().__init__()
-        self.time_taken = 0
+        self.score = score
 
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
@@ -17,11 +17,10 @@ class GameOverView(arcade.View):
         """
         Draw "Game over" across the screen.
         """
-        arcade.draw_text("Game Over", 240, 400, arcade.color.WHITE, 54)
-        arcade.draw_text("Click to restart", 310, 300, arcade.color.WHITE, 24)
+        arcade.draw_text("Game Over", constants.SCREEN_HEIGHT / 2, constants.SCREEN_WIDTH / 2, arcade.color.WHITE, 54)
 
-        time_taken_formatted = f"{round(self.time_taken, 2)} seconds"
-        arcade.draw_text(f"Time taken: {time_taken_formatted}",
+        time_taken_formatted = f"{round(self.score, 2)} points"
+        arcade.draw_text(f"Final Score: {time_taken_formatted}",
                          WIDTH/2,
                          200,
                          arcade.color.GRAY,
