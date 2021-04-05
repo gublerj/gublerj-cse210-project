@@ -22,7 +22,11 @@ What features will we include? The goal of asking this question is to identify w
 
 # ![alt text](http://url/to/img.png)
 
-
+# Instructions:
+run the __main__.py file to start the game.
+There is not an instructions page at this time, how you play is you kill the zombies and once the zombies stop appearing you will
+head to the top of the screen to move to the next level. Once you have moved on there will be an upgrade room, you may walk over 
+one upgrade to receive it and then move on to the next level to begin.
 
 # wish list
 
